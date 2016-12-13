@@ -1,1 +1,3 @@
 dk.ilios.realmfieldnames.RealmFieldNamesProcessor
+dk.nicolai_buch_andersen.realmobjectbuilders.RealmObjectBuilderProcessor
+dk.nicolai_buch_andersen.realmquerybuilders.RealmQueryBuilderProcessor
