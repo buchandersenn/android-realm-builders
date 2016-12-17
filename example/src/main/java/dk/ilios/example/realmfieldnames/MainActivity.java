@@ -3,9 +3,12 @@ package dk.ilios.example.realmfieldnames;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.Date;
+
 import dk.ilios.realmfieldnames.R;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,7 +35,26 @@ public class MainActivity extends AppCompatActivity {
                 .favoriteDog(spot)
                 .build();
 
-//        new DogQueryBuilder().age().between(0, 3);
+        RealmQuery<Dog> dogQuery = RealmQuery.createQuery(realm, Dog.class);
+
+        Dog firstDog = new DogQueryBuilder(realm)
+                .age().equalTo(3)
+                .weight().isNotNull()
+                .not()
+                    .beginGroup()
+                        .registrationNumber().between(0, 100)
+                        .or()
+                        .registrationNumber().between(500, 1000)
+                    .endGroup()
+                .findFirst();
+
+        new PersonQueryBuilder(realm)
+                .name().isNotEmpty()
+                .name().contains("John")
+                .hasCats().equalTo(true)
+                .has_fish().equalTo(null)
+                .has_fish().isNull()
+                .birthDate().between(new Date(), new Date(System.currentTimeMillis() + 3600));
 
         RealmResults<Person> results = realm.where(Person.class)
                 .equalTo(PersonFields.NAME, "John")

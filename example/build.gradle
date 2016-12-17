@@ -3,7 +3,7 @@ apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "dk.ilios.example.realmfieldnames"
@@ -22,6 +22,6 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
-    compile project(path: ':library')
-    apt project(':library')
+    compile project(':realmbuilders')
+    apt project(':realmbuilders-compiler')
 }
