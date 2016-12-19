@@ -1,6 +1,10 @@
-package dk.nicolai_buch_andersen.realmbuilders.objects;
+package dk.nicolai_buch_andersen.realmbuilders.queries;
 
-class MethodNameFormatter {
+/**
+ * Class for encapsulating the rules for converting between the field name in the Realm model class
+ * and the matching name in the "&lt;class&gt;Fields" class.
+ */
+class ClassNameFormatter {
 
     String format(String fieldName) {
         if (fieldName == null || fieldName.equals("")) {
@@ -53,7 +57,7 @@ class MethodNameFormatter {
                     }
                 } else {
                     // Only triggered for first code point
-                    result.appendCodePoint(currentCodepoint);
+                    result.appendCodePoint(Character.toUpperCase(currentCodepoint));
                 }
                 offset += Character.charCount(currentCodepoint);
             }

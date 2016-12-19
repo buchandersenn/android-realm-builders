@@ -25,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         realm = Realm.getInstance(realmConfig);
 
+        String age = PersonFields.DOGS.AGE;
+
         Dog spot = new DogBuilder().name("Spot").age(3).build();
         Dog fluffy = new DogBuilder().name("Fluffy").age(5).build();
 
@@ -35,7 +37,14 @@ public class MainActivity extends AppCompatActivity {
                 .favoriteDog(spot)
                 .build();
 
-        RealmQuery<Dog> dogQuery = RealmQuery.createQuery(realm, Dog.class);
+        RealmQuery<Dog> dogQuery = RealmQuery.createQuery(realm, Dog.class)
+                .equalTo("owner.name", "John");
+
+        RealmResults<Dog> puppiesOwnedByJohn = new DogQueryBuilder2(realm)
+                .age().lessThanOrEqualTo(3)
+                .owner().name().equalTo("John")
+                .findAll();
+
 
         Dog firstDog = new DogQueryBuilder(realm)
                 .age().equalTo(3)

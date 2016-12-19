@@ -1,5 +1,7 @@
 package dk.nicolai_buch_andersen.realmbuilders.queries;
 
+import com.squareup.javapoet.ClassName;
+
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -11,7 +13,8 @@ import dk.nicolai_buch_andersen.realmbuilders.AbstractConditionBuilder;
 class ClassData {
     private String packageName;
     private String simpleClassName;
-    private TreeMap<String, Class<? extends AbstractConditionBuilder>> fields = new TreeMap<>(); // <fieldName, fieldType>
+    private TreeMap<String, Class<? extends AbstractConditionBuilder>> fields = new TreeMap<>(); // <fieldName, condition builder class>
+    private TreeMap<String, ClassName> linkedFields = new TreeMap<>(); // <fieldName, linked field type>
 
     ClassData(String packageName, String simpleClassName) {
         this.packageName = packageName;
@@ -22,8 +25,16 @@ class ClassData {
         fields.put(field, type);
     }
 
+    void addLinkedField(String field, ClassName type) {
+        linkedFields.put(field, type);
+    }
+
     Map<String, Class<? extends AbstractConditionBuilder>> getFields() {
         return fields;
+    }
+
+    Map<String, ClassName> getLinkedFields() {
+        return linkedFields;
     }
 
     String getSimpleClassName() {

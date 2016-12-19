@@ -1,6 +1,7 @@
 package dk.nicolai_buch_andersen.realmbuilders.queries;
 
 import com.squareup.javapoet.ArrayTypeName;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 
 import java.util.HashSet;
@@ -53,8 +54,11 @@ public class RealmQueryBuilderProcessor extends AbstractProcessor {
     private Set<ClassData> classes = new HashSet<>();
     private Types typeUtils;
     private Messager messager;
+    private Elements elementUtils;
     private TypeMirror ignoreAnnotation;
     private TypeMirror requiredAnnotation;
+    private TypeMirror realmModelClass;
+    private DeclaredType realmListClass;
     private FileGenerator fileGenerator;
     private boolean done = false;
 
@@ -63,9 +67,12 @@ public class RealmQueryBuilderProcessor extends AbstractProcessor {
         super.init(processingEnv);
         typeUtils = processingEnv.getTypeUtils();
         messager = processingEnv.getMessager();
-        Elements elementUtils = processingEnv.getElementUtils();
+        elementUtils = processingEnv.getElementUtils();
         ignoreAnnotation = elementUtils.getTypeElement("io.realm.annotations.Ignore").asType();
         requiredAnnotation = elementUtils.getTypeElement("io.realm.annotations.Required").asType();
+        realmModelClass = elementUtils.getTypeElement("io.realm.RealmModel").asType();
+        realmListClass = typeUtils.getDeclaredType(elementUtils.getTypeElement("io.realm.RealmList"),
+                typeUtils.getWildcardType(null, null));
         fileGenerator = new FileGenerator(processingEnv.getFiler(), typeUtils);
     }
 
@@ -119,7 +126,12 @@ public class RealmQueryBuilderProcessor extends AbstractProcessor {
                 }
 
                 if (!ignoreField) {
-                    data.addField(element.getSimpleName().toString(), getConditionBuilderClassForField(element));
+                    ClassName linkedFieldType = getLinkedFieldType(element);
+                    if (linkedFieldType != null) {
+                        data.addLinkedField(element.getSimpleName().toString(), linkedFieldType);
+                    } else {
+                        data.addField(element.getSimpleName().toString(), getConditionBuilderClassForField(element));
+                    }
                 }
             }
         }
@@ -127,6 +139,32 @@ public class RealmQueryBuilderProcessor extends AbstractProcessor {
         return data;
     }
 
+    /**
+     * Returns the qualified name of the linked Realm class field or {@code null} if it is not a linked
+     * class.
+     */
+    private ClassName getLinkedFieldType(Element field) {
+        if (typeUtils.isAssignable(field.asType(), realmModelClass)) {
+            // Object link
+            TypeElement typeElement = elementUtils.getTypeElement(field.asType().toString());
+            return ClassName.get(typeElement);
+//            return ClassName.get(field.asType());
+        } else if (typeUtils.isAssignable(field.asType(), realmListClass)) {
+            // List link
+            TypeMirror fieldType = field.asType();
+            List<? extends TypeMirror> typeArguments = ((DeclaredType) fieldType).getTypeArguments();
+            if (typeArguments.size() == 0) {
+                return null;
+            }
+            TypeElement typeElement = elementUtils.getTypeElement(typeArguments.get(0).toString());
+            return ClassName.get(typeElement);
+//            return get(typeArguments.get(0));
+        } else {
+            return null;
+        }
+    }
+
+    // TODO : Return boxed or unboxed TypeName; let FileGenerator find the correct condition builder
     private Class<? extends AbstractConditionBuilder> getConditionBuilderClassForField(Element field) {
         // TODO : Handle linked fields
         if (field.asType().getKind() == TypeKind.BOOLEAN || field.asType().toString().equals("java.lang.Boolean")) {
