@@ -15,6 +15,8 @@ import java.util.Set;
 import javax.annotation.processing.Filer;
 import javax.lang.model.element.Modifier;
 
+import io.realm.RealmList;
+
 /**
  * Class responsible for creating the final output files.
  */
@@ -65,8 +67,8 @@ class FileGenerator {
                 ParameterizedTypeName parameterizedType = (ParameterizedTypeName) fieldType;
                 ClassName rawType = parameterizedType.rawType;
                 if (rawType.packageName().equals("io.realm") && rawType.simpleName().equals("RealmList")) {
-                    TypeName typeName = parameterizedType.typeArguments.get(0);
-                    addAccumulatingMethod(fileBuilder, fieldName, typeName, returnClass);
+                    TypeName accumulatingType = parameterizedType.typeArguments.get(0);
+                    addAccumulatingMethod(fileBuilder, fieldName, accumulatingType, returnClass);
                 }
             }
         }
@@ -102,7 +104,7 @@ class FileGenerator {
         fileBuilder.addMethod(method);
     }
 
-    private void addAccumulatingMethod(TypeSpec.Builder fileBuilder, String fieldName, TypeName fieldType, ClassName returnClass) {
+    private void addAccumulatingMethod(TypeSpec.Builder fileBuilder, String fieldName, TypeName accumulatingType, ClassName returnClass) {
         String baseName = fieldName;
         if (Character.toLowerCase(baseName.charAt(baseName.length() - 1)) == 's') {
             baseName = fieldName.substring(0, baseName.length() - 1);
@@ -114,11 +116,13 @@ class FileGenerator {
 
         MethodSpec method = MethodSpec.methodBuilder(methodName)
                 .addModifiers(Modifier.PUBLIC)
-                .addParameter(fieldType, baseName)
+                .addParameter(accumulatingType, baseName)
                 .returns(returnClass)
+                .addStatement("if (this." + fieldName + "==null) " + fieldName + "= new $T<$T>()", RealmList.class, accumulatingType)
                 .addStatement("this." + fieldName + ".add(" + baseName + ")")
                 .addStatement("return this")
                 .build();
+//        if (dogs==null) dogs = new RealmList<Dog>();
 
         fileBuilder.addMethod(method);
     }

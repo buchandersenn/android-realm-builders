@@ -73,7 +73,7 @@ public class RealmQueryBuilderProcessor extends AbstractProcessor {
         realmModelClass = elementUtils.getTypeElement("io.realm.RealmModel").asType();
         realmListClass = typeUtils.getDeclaredType(elementUtils.getTypeElement("io.realm.RealmList"),
                 typeUtils.getWildcardType(null, null));
-        fileGenerator = new FileGenerator(processingEnv.getFiler(), typeUtils);
+        fileGenerator = new FileGenerator(processingEnv.getFiler());
     }
 
     @Override

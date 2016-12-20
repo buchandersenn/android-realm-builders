@@ -7,6 +7,7 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
+// TODO : Add support for pretty-printing queries (for debug)
 public class AbstractQueryBuilder<T extends RealmModel> {
     protected RealmQuery<T> query;
 
