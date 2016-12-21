@@ -4,6 +4,8 @@ This library auto-generate builder classes that for creating and querying Realm 
 
 For each Realm model class a corresponding `<class>Builder` and `<class>QueryBuilder` is created.
 
+THE LIBRARY IS STILL A WORK IN PROGRESS. NOT YET RELEASED.
+
 ## Installation
 
 Just include the following dependency in your `gradle.build` file
