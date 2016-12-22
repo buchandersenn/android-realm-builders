@@ -8,7 +8,7 @@ THE LIBRARY IS STILL A WORK IN PROGRESS. NOT YET RELEASED.
 
 ## Installation
 
-Just include the following dependency in your `gradle.build` file
+Just include the following dependency in your `gradle.build` file:
 
 ```gradle
 compile 'com.github.buchandersenn:android-realm-builders:1.0.0'
@@ -20,7 +20,7 @@ This library is compatible with  `Realm 1.1.1` and onwards.
 ## Usage
 
 The library adds an annotation processor that automatically detects all Realm model classes and
-generate two extra classes called `<class>Builder` and `<class>QueryBuilder`. These classes can
+generates two extra classes called `<class>Builder` and `<class>QueryBuilder`. These classes can
 then be used as follows:
 
 ```java
@@ -45,7 +45,7 @@ public class Person extends RealmObject {
 
 Realm realm = Realm.getDefaultInstance();
 
-// Create model objects...
+// Create model objects using the object builders...
 final Dog spot = new DogBuilder().name("Spot").age(3).build();
 final Dog fluffy = new DogBuilder().name("Fluffy").age(5).build();
 final Dog killer = new DogBuilder().name("Killer").age(8).build();
@@ -77,7 +77,7 @@ realm.executeTransaction(new Realm.Transaction() {
     }
 });
 
-// Execute simple and chained queries...
+// Execute simple and chained queries using the query builders...
 Dog dogNamedKiller = new DogQueryBuilder(realm)
     .name().equalTo("Killer")
     .findFirst();
@@ -87,8 +87,8 @@ RealmResults<Person> personsOwningPuppies = new PersonQueryBuilder(realm)
     .findAll();
 ```
 
-The main benefits are the removal of all the error-prone hard coded field name strings in queries
-and type safety. Consider the queries standard Realm query:
+The main benefits are the removal of all the error-prone field name strings
+and type safety in the queries. Consider the standard Realm query:
 
 ```java
 Dog dogNamedKiller = realm.where(Dog.class)
@@ -98,12 +98,11 @@ Dog dogNamedKiller = realm.where(Dog.class)
 ```
 
 This query compiles fine, but throws an exception at runtime due to type mismatch
-(integer vs. string) and a misspelled field name. If this a seldom used query or if your test
-mocks away the data access at a too-high level, such code may easily make its way into production
-and break your app.
+(string vs. integer for the age) and a misspelled field name ("nome" vs "name").
+If this is a seldom used query, or if your tests aren't quite fine-grained enough,
+such code can easily make its way into production, and then break your app at runtime.
 
-These types of errors are impossible (no field name strings) or caught at compile time when you use
-the auto-generated query builders instead:
+You can avoid these types of errors if you use the auto-generated query builders instead:
 
 ```java
 Dog dogNamedKiller = new DogQueryBuilder(realm)
@@ -113,23 +112,19 @@ Dog dogNamedKiller = new DogQueryBuilder(realm)
 RealmResults<Person> personsOwningPuppies = new PersonQueryBuilder(realm)
     .dogs().name().lessThanOrEqualTo(3) // Won't compile - name is a string and doesn't support lessThanOrEqualTo
     .findAll();
-
-Number youngestDogOwnedByJohn = new DogQueryBuilder(realm)
-        .owner().name().equalTo("John")
-        .age().min();
 ```
 
 In general, beginsWith(), endsWith() and contains() are only available for String fields, while
-between(), lessThan(), lessThanOrEqualTo(), greaterThanOrEqualTo() are available for numerical
-fields. The methods min() and max() are available for numeric and date fields and the methods sum()
-and average() is available for numeric fields only.
+between(), lessThan(), lessThanOrEqualTo(), greaterThan() and greaterThanOrEqualTo() are available
+for numerical fields. The methods min() and max() are available for both numeric and date fields
+and the methods sum() and average() is available for numeric fields only.
 
 You can see more examples in the example app [here](/example).
 
 ## Tips and Tricks
 
-To construct objects with default values or computed values, consider adding factory methods to
-Realm model classes. For example:
+To construct objects with default or computed values, consider adding factory methods to
+the Realm model classes. For example:
 
 ```java
 public class Person extends RealmObject {
@@ -138,8 +133,8 @@ public class Person extends RealmObject {
     public boolean hasDogs;
     public RealmList<Dog> dogs;
 
-    public static Person createPerson(Realm realm, String name, Dog dog) {
-        return new PersonBuilder(realm)
+    public static Person createPerson(String name, Dog dog) {
+        return new PersonBuilder()
             .uuid(UUID.randomUUID().toString())
             .name(name)
             .hasDogs(dog != null)
@@ -149,8 +144,8 @@ public class Person extends RealmObject {
 }
 ```
 
-If you find you find yourself often executing similar queries then you can add them to the
-Realm model class as well:
+If you find yourself often executing similar queries then you can add them to
+the Realm model classes as well:
 
 ```java
 public class Person extends RealmObject {
@@ -167,7 +162,7 @@ public class Person extends RealmObject {
 
 ## Caveats
 
-The `<class>Builder` object builders are mostly a "proof of concept" as of yet. They have a number
+The `<class>Builder` classes are mostly a "proof of concept" as of yet. They have a number
 of limitations:
 
 * They do not support Realm model classes with private fields and setter methods
@@ -175,7 +170,7 @@ of limitations:
 * The build methods do not check for null values in required fields when building the end result
 * They lack a lot of other features found in Google's AutoValue builders
 
-The `<class>QueryBuilder` query builders also has some limitations:
+The `<class>QueryBuilder` classes also have a few limitations:
 
 * The `findAllSorted(String fieldName)` and related methods still takes field name strings as arguments
 * The `distinct(String fieldName)` and related methods still takes field name strings as arguments
