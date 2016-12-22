@@ -1,8 +1,10 @@
 # Realm Builders
 
-This library auto-generate builder classes that for creating and querying Realm data.
+This library auto-generates builder classes for creating and querying Realm data.
+For each Realm model class two corresponding classes are created:
 
-For each Realm model class a corresponding `<class>Builder` and `<class>QueryBuilder` is created.
+* `<class>Builder`
+* `<class>QueryBuilder`
 
 THE LIBRARY IS STILL A WORK IN PROGRESS. NOT YET RELEASED.
 
@@ -20,7 +22,7 @@ This library is compatible with  `Realm 1.1.1` and onwards.
 ## Usage
 
 The library adds an annotation processor that automatically detects all Realm model classes and
-generates two extra classes called `<class>Builder` and `<class>QueryBuilder`. These classes can
+generates two extra classes called `<class>Builder` and `<class>QueryBuilder.` These classes can
 then be used as follows:
 
 ```java
@@ -88,7 +90,7 @@ RealmResults<Person> personsOwningPuppies = new PersonQueryBuilder(realm)
 ```
 
 The main benefits are the removal of all the error-prone field name strings
-and type safety in the queries. Consider the standard Realm query:
+and the added type safety in the queries. Consider the standard Realm query:
 
 ```java
 Dog dogNamedKiller = realm.where(Dog.class)
@@ -106,18 +108,18 @@ You can avoid these types of errors if you use the auto-generated query builders
 
 ```java
 Dog dogNamedKiller = new DogQueryBuilder(realm)
-    .age().equalTo("Killer") // Won't compile - age is an integer and must be compared with another integer
+    .age().equalTo("Killer") // Won't compile - age is an integer and can't be compared to a string
     .findFirst();
 
 RealmResults<Person> personsOwningPuppies = new PersonQueryBuilder(realm)
-    .dogs().name().lessThanOrEqualTo(3) // Won't compile - name is a string and doesn't support lessThanOrEqualTo
+    .dogs().name().lessThanOrEqualTo(3) // Won't compile - string fields doesn't support lessThanOrEqualTo
     .findAll();
 ```
 
-In general, beginsWith(), endsWith() and contains() are only available for String fields, while
-between(), lessThan(), lessThanOrEqualTo(), greaterThan() and greaterThanOrEqualTo() are available
-for numerical fields. The methods min() and max() are available for both numeric and date fields
-and the methods sum() and average() is available for numeric fields only.
+In general the methods beginsWith(), endsWith() and contains() are only available for String fields,
+while between(), lessThan(), lessThanOrEqualTo(), greaterThan() and greaterThanOrEqualTo() are
+available for numerical fields. The methods min() and max() are available for both numeric and
+date fields; sum() and average() are available for numeric fields only.
 
 You can see more examples in the example app [here](/example).
 
