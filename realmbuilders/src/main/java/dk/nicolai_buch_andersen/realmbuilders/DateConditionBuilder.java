@@ -43,9 +43,17 @@ public class DateConditionBuilder<B extends AbstractQueryBuilder> extends Abstra
         return builder;
     }
 
-    public B in(Date [] values) {
+    public B in(Date[] values) {
         this.builder.query.in(fieldName, values);
         return builder;
+    }
+
+    public Date min() {
+        return builder.query.minimumDate(fieldName);
+    }
+
+    public Date max() {
+        return builder.query.maximumDate(fieldName);
     }
 
     public static class Nullable<B extends AbstractQueryBuilder> extends DateConditionBuilder<B> {

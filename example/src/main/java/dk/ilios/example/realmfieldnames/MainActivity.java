@@ -7,6 +7,7 @@ import android.widget.TextView;
 import dk.ilios.realmfieldnames.R;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmModel;
 import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
@@ -62,10 +63,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Dog dogNamedKiller = new DogQueryBuilder(realm).name().equalTo("Killer").findFirst();
-        appendDog("dog named Killer", dogNamedKiller);
+        appendResult("dog named Killer", dogNamedKiller);
 
         RealmResults<Dog> dogsOwnedByJohn = new DogQueryBuilder(realm).owner().name().equalTo("John").findAll();
-        appendDogs("dogs owned by John", dogsOwnedByJohn);
+        appendResults("dogs owned by John", dogsOwnedByJohn);
+
+        Number youngestDogOwnedByJohn = new DogQueryBuilder(realm)
+                .owner().name().equalTo("John")
+                .age().min();
+        appendResult("youngest dog owned by John", youngestDogOwnedByJohn);
 
         RealmResults<Dog> complexDogs = new DogQueryBuilder(realm)
                 .age().greaterThanOrEqualTo(3)
@@ -75,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                     .registrationNumber().between(500, 1000)
                 .endGroup()
                 .findAll();
-        appendDogs("complex dog query", complexDogs);
+        appendResults("complex dog query", complexDogs);
 
         Person personNamedJohn = new PersonQueryBuilder(realm)
                 .name().isNotEmpty()
@@ -85,43 +91,31 @@ public class MainActivity extends AppCompatActivity {
                 .has_fish().equalTo(null)
                 .has_fish().isNull()
                 .findFirst();
-        appendPerson("Person where name contains 'John'", personNamedJohn);
+        appendResult("Person where name contains 'John'", personNamedJohn);
 
         Person personNamedMartin = new PersonQueryBuilder(realm)
                 .name().equalTo("Martin")
                 .findFirst();
-        appendPerson("Person named 'Martin'", personNamedMartin);
+        appendResult("Person named 'Martin'", personNamedMartin);
     }
 
-    private void appendDog(String caption, Dog dog) {
+    private void appendResult(String caption, Object result) {
         textView.append(caption + ":\n");
 
-        if (dog == null) {
-            textView.append("No such dog in Realm\n");
+        if (result == null) {
+            textView.append("No such element in Realm\n");
         } else {
-            textView.append(dog.name + "\n");
+            textView.append(result + "\n");
         }
 
         textView.append("\n");
     }
 
-    private void appendDogs(String caption, RealmResults<Dog> results) {
+    private void appendResults(String caption, RealmResults<? extends RealmModel> results) {
         textView.append(caption + ":\n");
-        for (Dog dog : results) {
-            textView.append(dog.name + "\n");
+        for (RealmModel model : results) {
+            textView.append(model + "\n");
         }
-        textView.append("\n");
-    }
-
-    private void appendPerson(String caption, Person person) {
-        textView.append(caption + ":\n");
-
-        if (person == null) {
-            textView.append("No such person in Realm\n");
-        } else {
-            textView.append(person.name + "\n");
-        }
-
         textView.append("\n");
     }
 

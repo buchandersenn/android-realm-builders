@@ -21,6 +21,22 @@ public class ByteConditionBuilder<B extends AbstractQueryBuilder> extends Abstra
         return builder;
     }
 
+    public Number min() {
+        return builder.query.min(fieldName);
+    }
+
+    public Number max() {
+        return builder.query.max(fieldName);
+    }
+
+    public double average() {
+        return builder.query.average(fieldName);
+    }
+
+    public Number sum() {
+        return builder.query.sum(fieldName);
+    }
+
     public static class Nullable<B extends AbstractQueryBuilder> extends ByteConditionBuilder<B> {
 
         public Nullable(String fieldName, B builder) {
