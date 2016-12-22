@@ -16,7 +16,7 @@ buildscript {
 apply plugin: 'ch.netzwerg.release'
 
 allprojects {
-    group = 'dk.ilios'
+    group = 'com.github.buchandersenn'
     version = file("${rootDir}/version.txt").text.trim();
     repositories {
         jcenter()

@@ -1,3 +1,3 @@
-dk.nicolai_buch_andersen.realmbuilders.fields.RealmFieldNamesProcessor
-dk.nicolai_buch_andersen.realmbuilders.objects.RealmObjectBuilderProcessor
-dk.nicolai_buch_andersen.realmbuilders.queries.RealmQueryBuilderProcessor
+com.github.buchandersenn.realmbuilders.fields.RealmFieldNamesProcessor
+com.github.buchandersenn.realmbuilders.objects.RealmObjectBuilderProcessor
+com.github.buchandersenn.realmbuilders.queries.RealmQueryBuilderProcessor
