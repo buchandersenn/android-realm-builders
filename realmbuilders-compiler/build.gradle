@@ -15,6 +15,15 @@ dependencies {
     testCompile 'io.realm:realm-annotations:1.2.0'
 }
 
+// Configure ch.netzwerg.release plugin
+// See https://github.com/netzwerg/gradle-release-plugin
+release {
+    dependsOn build
+    push = false
+    versionSuffix = '-SNAPSHOT'
+    tagPrefix = 'v'
+}
+
 //task javadocJar(type: Jar, dependsOn: 'javadoc') {
 //    from javadoc.destinationDir
 //    classifier = 'javadoc'
@@ -100,28 +109,5 @@ dependencies {
 //artifacts {
 //    archives javadocJar
 //    archives sourcesJar
-//}
-//
-//task checkstyle(type: Checkstyle) {
-//    source 'src'
-//    include '**/*.java'
-//    exclude '**/gen/**'
-//    exclude '**/R.java'
-//    exclude '**/BuildConfig.java'
-//
-////    def configProps = ['proj.module.dir': projectDir.absolutePath]
-////    configProperties configProps
-//
-//    // empty classpath
-//    classpath = files()
-//}
-//
-//// Configure ch.netzwerg.release plugin
-//// See https://github.com/netzwerg/gradle-release-plugin
-//release {
-//    dependsOn build
-//    push = false
-//    versionSuffix = '-SNAPSHOT'
-//    tagPrefix = 'v'
 //}
 
