@@ -30,4 +30,4 @@
 > git push --follow-tags
 ```
 
-2) Goto https://bintray.com/buchandersenn/maven/android-realm-builders and release artifacts.
+3) Goto https://bintray.com/buchandersenn/maven/android-realm-builders and release artifacts.
