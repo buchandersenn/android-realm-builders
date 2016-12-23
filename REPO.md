@@ -1,6 +1,6 @@
 # Using this repo
 
-* Current version is defined in *version.txt*
+Current version is defined in *version.txt*
 
 **Installing a local SNAPSHOT**
 
