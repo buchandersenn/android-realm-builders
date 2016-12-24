@@ -5,7 +5,7 @@ Current version is defined in *version.txt*
 **Installing a local SNAPSHOT**
 
 ```shell-script
-> ./gradlew build publishToMavenLocal
+> ./gradlew clean build publishToMavenLocal
 ```
 
 **Release a new remote SNAPSHOT**

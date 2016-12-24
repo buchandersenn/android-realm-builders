@@ -1,0 +1,51 @@
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+task javadocJar(type: Jar, dependsOn: 'javadoc') {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+task sourcesJar(type: Jar, dependsOn: 'classes') {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// TODO : Extract all publishing code to separate gradle file
+publishing {
+    publications {
+        library(MavenPublication) {
+            groupId group
+            artifactId artifactProperties.publishingArtifactId
+            version version
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                Node root = asNode()
+                root.appendNode('name', artifactProperties.publishingArtifactName)
+                root.appendNode('description', commonArtifactProperties.artifactDescription)
+                root.appendNode('url', commonArtifactProperties.siteUrl)
+
+                def issues = root.appendNode('issueManagement')
+                issues.appendNode('system', 'github')
+                issues.appendNode('url', commonArtifactProperties.siteUrl + '/issues')
+
+                def scm = root.appendNode('scm')
+                scm.appendNode('url', commonArtifactProperties.siteUrl)
+                scm.appendNode('connection', commonArtifactProperties.gitConnection)
+                scm.appendNode('developerConnection', commonArtifactProperties.gitConnection)
+
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'The Apache Software License, Version 2.0')
+                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+                license.appendNode('distribution', 'repo')
+            }
+        }
+    }
+}

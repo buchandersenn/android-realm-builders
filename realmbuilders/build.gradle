@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply from: '../publishing.gradle'
 
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
@@ -6,3 +7,8 @@ targetCompatibility = '1.7'
 dependencies {
     compile fileTree(dir: '../libs', include: ['*.jar'])
 }
+
+ext.artifactProperties = [
+        publishingArtifactId: 'android-realm-builders',
+        publishingArtifactName: 'android-realm-builders',
+]

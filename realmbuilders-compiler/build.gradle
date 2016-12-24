@@ -1,6 +1,6 @@
 apply plugin: 'java'
-//apply plugin: 'maven'
-//apply plugin: 'maven-publish'
+apply from: '../publishing.gradle'
+
 //apply plugin: 'com.jfrog.artifactory'
 //apply plugin: 'com.jfrog.bintray'
 
@@ -15,6 +15,7 @@ dependencies {
     testCompile 'io.realm:realm-annotations:1.2.0'
 }
 
+// TODO : Move to realmbuilders library, as that's the one to be build first
 // Configure ch.netzwerg.release plugin
 // See https://github.com/netzwerg/gradle-release-plugin
 release {
@@ -24,49 +25,11 @@ release {
     tagPrefix = 'v'
 }
 
-//task javadocJar(type: Jar, dependsOn: 'javadoc') {
-//    from javadoc.destinationDir
-//    classifier = 'javadoc'
-//}
-//task sourcesJar(type: Jar, dependsOn: 'classes') {
-//    from sourceSets.main.allSource
-//    classifier = 'sources'
-//}
-//
-//publishing {
-//    publications {
-//        library(MavenPublication) {
-//            groupId 'dk.ilios'
-//            artifactId 'realmfieldnameshelper'
-//            version version
-//            from components.java
-//            artifact sourcesJar
-//            artifact javadocJar
-//
-//            pom.withXml {
-//                Node root = asNode()
-//                root.appendNode('name', 'Realm Field Names Helper')
-//                root.appendNode('description', 'Provides type safe Realm queries.')
-//                root.appendNode('url', 'https://github.com/cmelchior/realmfieldnameshelper')
-//
-//                def issues = root.appendNode('issueManagement')
-//                issues.appendNode('system', 'github')
-//                issues.appendNode('url', 'https://github.com/cmelchior/realmfieldnameshelper/issues')
-//
-//                def scm = root.appendNode('scm')
-//                scm.appendNode('url', 'scm:https://github.com/cmelchior/realmfieldnameshelper')
-//                scm.appendNode('connection', 'scm:git@github.com:cmelchior/realmfieldnameshelper.git')
-//                scm.appendNode('developerConnection', 'scm:git@github.com:cmelchior/realmfieldnameshelper.git')
-//
-//                def license = root.appendNode('licenses').appendNode('license')
-//                license.appendNode('name', 'The Apache Software License, Version 2.0')
-//                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
-//                license.appendNode('distribution', 'repo')
-//            }
-//        }
-//    }
-//}
-//
+ext.artifactProperties = [
+        publishingArtifactId: 'android-realm-builders-compiler',
+        publishingArtifactName: 'android-realm-builders-compiler',
+]
+
 //// SNAPSHOT configuration
 //artifactory {
 //    contextUrl = 'https://oss.jfrog.org'
@@ -104,10 +67,5 @@ release {
 //        labels = ['android', 'realm']
 //        publicDownloadNumbers = false
 //    }
-//}
-//
-//artifacts {
-//    archives javadocJar
-//    archives sourcesJar
 //}
 

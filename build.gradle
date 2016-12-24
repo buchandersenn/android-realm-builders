@@ -16,6 +16,12 @@ buildscript {
 
 apply plugin: 'ch.netzwerg.release'
 
+ext.commonArtifactProperties = [
+        artifactDescription: 'Auto generate builders for creating and querying Realm models',
+        siteUrl: 'https://github.com/buchandersenn/android-realm-builders',
+        gitConnection: 'scm:git@github.com:buchandersenn/android-realm-builders.git',
+]
+
 allprojects {
     group = 'com.github.buchandersenn'
     version = file("${rootDir}/version.txt").text.trim();
