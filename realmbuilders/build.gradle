@@ -12,3 +12,12 @@ ext.artifactProperties = [
         publishingArtifactId: 'android-realm-builders',
         publishingArtifactName: 'android-realm-builders',
 ]
+
+// Configure ch.netzwerg.release plugin
+// See https://github.com/netzwerg/gradle-release-plugin
+release {
+    dependsOn build
+    push = false
+    versionSuffix = '-SNAPSHOT'
+    tagPrefix = 'v'
+}

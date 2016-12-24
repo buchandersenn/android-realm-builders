@@ -15,7 +15,6 @@ artifacts {
     archives sourcesJar
 }
 
-// TODO : Extract all publishing code to separate gradle file
 publishing {
     publications {
         library(MavenPublication) {

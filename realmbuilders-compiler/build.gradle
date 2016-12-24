@@ -15,16 +15,6 @@ dependencies {
     testCompile 'io.realm:realm-annotations:1.2.0'
 }
 
-// TODO : Move to realmbuilders library, as that's the one to be build first
-// Configure ch.netzwerg.release plugin
-// See https://github.com/netzwerg/gradle-release-plugin
-release {
-    dependsOn build
-    push = false
-    versionSuffix = '-SNAPSHOT'
-    tagPrefix = 'v'
-}
-
 ext.artifactProperties = [
         publishingArtifactId: 'android-realm-builders-compiler',
         publishingArtifactName: 'android-realm-builders-compiler',
