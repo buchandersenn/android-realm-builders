@@ -1,9 +1,6 @@
 apply plugin: 'java'
 apply from: '../publishing.gradle'
 
-//apply plugin: 'com.jfrog.artifactory'
-//apply plugin: 'com.jfrog.bintray'
-
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 
@@ -19,43 +16,4 @@ ext.artifactProperties = [
         publishingArtifactId: 'android-realm-builders-compiler',
         publishingArtifactName: 'android-realm-builders-compiler',
 ]
-
-//// SNAPSHOT configuration
-//artifactory {
-//    contextUrl = 'https://oss.jfrog.org'
-//    publish {
-//        repository {
-//            repoKey = 'oss-snapshot-local'
-//            username = project.hasProperty('privateBintrayUser') ? privateBintrayUser : System.getenv('PRIVATE_BINTRAY_USER')
-//            password = project.hasProperty('privateBintrayKey') ? privateBintrayKey : System.getenv('PRIVATE_BINTRAY_KEY')
-//            maven = true
-//        }
-//        defaults {
-//            publications('library')
-//            publishPom = true
-//            publishIvy = false
-//        }
-//    }
-//}
-//
-//// Release configuration
-//bintray {
-//    // user and key come from the gradle.properties file in ~/.gradle
-//    user = project.hasProperty('privateBintrayUser') ? privateBintrayUser : System.getenv('PRIVATE_BINTRAY_USER')
-//    key = project.hasProperty('privateBintrayKey') ? privateBintrayKey : System.getenv('PRIVATE_BINTRAY_KEY')
-//    publications = ['library']
-//    publish = false
-//    dryRun = false
-//    pkg {
-//        repo = 'maven'
-//        name = 'realmfieldnameshelper'
-//        desc = 'Provides type safe Realm queries'
-//        websiteUrl = 'https://github.com/cmelchior/realmfieldnameshelper'
-//        issueTrackerUrl = 'https://github.com/cmelchior/realmfieldnameshelper/issues'
-//        vcsUrl = 'https://github.com/cmelchior/realmfieldnameshelper.git'
-//        licenses = ['Apache-2.0']
-//        labels = ['android', 'realm']
-//        publicDownloadNumbers = false
-//    }
-//}
 

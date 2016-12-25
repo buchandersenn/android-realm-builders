@@ -1,5 +1,7 @@
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
+//apply plugin: 'com.jfrog.bintray'
 
 task javadocJar(type: Jar, dependsOn: 'javadoc') {
     from javadoc.destinationDir
@@ -14,6 +16,9 @@ artifacts {
     archives javadocJar
     archives sourcesJar
 }
+
+Properties bintrayProperties = new Properties()
+bintrayProperties.load(project.rootProject.file('bintray.properties').newDataInputStream())
 
 publishing {
     publications {
@@ -38,7 +43,7 @@ publishing {
                 def scm = root.appendNode('scm')
                 scm.appendNode('url', commonArtifactProperties.siteUrl)
                 scm.appendNode('connection', commonArtifactProperties.gitConnection)
-                scm.appendNode('developerConnection', commonArtifactProperties.gitConnection)
+                //scm.appendNode('developerConnection', commonArtifactProperties.gitConnection)
 
                 def license = root.appendNode('licenses').appendNode('license')
                 license.appendNode('name', 'The Apache Software License, Version 2.0')
@@ -46,5 +51,44 @@ publishing {
                 license.appendNode('distribution', 'repo')
             }
         }
+    }
+}
+
+//// SNAPSHOT configuration
+//artifactory {
+//    contextUrl = 'https://oss.jfrog.org'
+//    publish {
+//        repository {
+//            repoKey = 'oss-snapshot-local'
+//            username = bintrayProperties.hasProperty('bintray.user') ? bintrayProperties.getProperty('bintray.user') : System.getenv('BINTRAY_USER')
+//            password = bintrayProperties.hasProperty('bintray.apikey') ? bintrayProperties.getProperty('bintray.apikey') : System.getenv('BINTRAY_KEY')
+//            maven = true
+//        }
+//        defaults {
+//            publications('library')
+//            publishPom = true
+//            publishIvy = false
+//        }
+//    }
+//}
+
+// Release configuration
+bintray {
+    // user and key come from the gradle.properties file in ~/.gradle
+    username = bintrayProperties.hasProperty('bintray.user') ? bintrayProperties.getProperty('bintray.user') : System.getenv('BINTRAY_USER')
+    password = bintrayProperties.hasProperty('bintray.apikey') ? bintrayProperties.getProperty('bintray.apikey') : System.getenv('BINTRAY_KEY')
+    publications = ['library']
+    publish = false
+    dryRun = false
+    pkg {
+        repo = 'maven'
+        name = artifactProperties.publishingArtifactName
+        desc = commonArtifactProperties.artifactDescription
+        websiteUrl = commonArtifactProperties.siteUrl
+        issueTrackerUrl = commonArtifactProperties.siteUrl + '/issues'
+        vcsUrl = commonArtifactProperties.gitConnection
+        licenses = ['Apache-2.0']
+        labels = ['android', 'realm']
+        publicDownloadNumbers = false
     }
 }
