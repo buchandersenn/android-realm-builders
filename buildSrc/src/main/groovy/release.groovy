@@ -81,7 +81,7 @@ class GitRelease implements Plugin<Project> {
         project.task('prepareGitRelease', dependsOn: 'checkGitRepo') {
             doLast {
                 // Set release version by removing -SNAPSHOT
-                def versionFile = new File("${rootDir}/version.txt")
+                def versionFile = new File("${project.rootDir}/version.txt")
                 def currentVersion = versionFile.text.trim()
                 def newVersion = currentVersion.replace('-SNAPSHOT', '')
                 versionFile.write(newVersion)
