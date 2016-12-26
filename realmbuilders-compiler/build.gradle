@@ -1,5 +1,7 @@
 apply plugin: 'java'
-apply from: '../publishing.gradle'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
@@ -12,8 +14,81 @@ dependencies {
     testCompile 'io.realm:realm-annotations:1.2.0'
 }
 
-ext.artifactProperties = [
-        publishingArtifactId: 'android-realm-builders-compiler',
-        publishingArtifactName: 'android-realm-builders-compiler',
-]
+def publishingArtifactId = 'android-realm-builders-compiler'
+def publishingArtifactName = 'android-realm-builders-compiler'
+def publishingArtifactDescription = commonArtifactProperties.artifactDescription
+def publishingSiteUrl = commonArtifactProperties.siteUrl
+def publishingGitUrl = commonArtifactProperties.gitUrl
 
+// Artifacts
+task javadocJar(type: Jar, dependsOn: 'javadoc') {
+    from javadoc.destinationDir
+    classifier = 'javadoc'
+}
+task sourcesJar(type: Jar, dependsOn: 'classes') {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+// Maven POM
+publishing {
+    publications {
+        library(MavenPublication) {
+            groupId group
+            artifactId publishingArtifactId
+            version version
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                Node root = asNode()
+                root.appendNode('name', publishingArtifactName)
+                root.appendNode('description', publishingArtifactDescription)
+                root.appendNode('url', publishingSiteUrl)
+
+                def issues = root.appendNode('issueManagement')
+                issues.appendNode('system', 'github')
+                issues.appendNode('url', publishingSiteUrl + '/issues')
+
+                def scm = root.appendNode('scm')
+                scm.appendNode('url', publishingSiteUrl)
+                scm.appendNode('connection', publishingGitUrl)
+                //scm.appendNode('developerConnection', commonArtifactProperties.gitConnection)
+
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'The Apache Software License, Version 2.0')
+                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+                license.appendNode('distribution', 'repo')
+            }
+        }
+    }
+}
+
+// Bintray release
+Properties bintrayProperties = new Properties()
+bintrayProperties.load(project.rootProject.file('bintray.properties').newDataInputStream())
+bintray {
+    // user and key come from the bintray.properties file in project root (not included in git)
+    user = bintrayProperties.getProperty('bintray.user')
+    key = bintrayProperties.getProperty('bintray.apikey')
+    publications = ['library']
+    publish = false
+    dryRun = false
+    pkg {
+        repo = 'maven'
+        name = publishingArtifactName
+        desc = publishingArtifactDescription
+        websiteUrl = publishingSiteUrl
+        issueTrackerUrl = publishingSiteUrl + '/issues'
+        vcsUrl = publishingGitUrl
+        licenses = ['Apache-2.0']
+        labels = ['android', 'realm']
+        publicDownloadNumbers = false
+    }
+}

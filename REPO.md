@@ -16,18 +16,23 @@ Current version is defined in *version.txt*
 
 **Release a new version to Bintray**
 
-1) Check if there are uncommitted changes in the repo; nly proceed if the repo is clean
+1) Check if there are uncommitted changes in the repo; Only proceed if the repo is clean
+
+2) Prepare release by removing -SNAPSHOT from version.txt and commit change
+
+3) Build release and upload to bintray
 
 ```shell-script
-> if [[ -n $(git status --porcelain) ]]; then echo "repo is dirty"; fi
+> ./gradlew clean bintrayUpload
 ```
 
-2) Increment version number, build new artifacts and upload them to bintray then commit changes
+4) Create git tag and push to origin
 
 ```shell-script
-> ./gradlew release
-> ./gradlew clean bintrayUpload
+> git tag -a vX.Y.Z -m "version X.Y.Z"
 > git push --follow-tags
 ```
+
+5) Prepare for next release by increasing version number in version.txt and commit change
 
 3) Goto https://bintray.com/buchandersenn/maven/android-realm-builders and release artifacts.
