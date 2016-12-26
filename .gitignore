@@ -4,5 +4,6 @@
 /local.properties
 .idea
 .DS_Store
+/buildSrc/build
 /build
 /captures

@@ -1,6 +1,7 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+import com.github.buchandersenn.GitRelease
 
-apply from: 'release.gradle'
+//apply from: 'release.gradle'
+apply plugin: GitRelease
 
 buildscript {
     repositories {
@@ -20,6 +21,11 @@ ext.commonArtifactProperties = [
         siteUrl: 'https://github.com/buchandersenn/android-realm-builders',
         gitUrl: 'scm:git@github.com:buchandersenn/android-realm-builders.git',
 ]
+
+gitRelease {
+    releaseTasks = [tasks.getByPath('realmbuilders-compiler:clean'),
+                    tasks.getByPath('realmbuilders:clean')]
+}
 
 allprojects {
     group = 'com.github.buchandersenn'
