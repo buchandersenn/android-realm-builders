@@ -78,7 +78,7 @@ bintray {
     user = bintrayProperties.getProperty('bintray.user')
     key = bintrayProperties.getProperty('bintray.apikey')
     publications = ['library']
-    publish = false
+    publish = rootProject.hasProperty('snapshot') ? snapshot.toBoolean() : false
     dryRun = false
     pkg {
         repo = 'maven'
