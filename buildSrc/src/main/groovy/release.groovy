@@ -106,7 +106,7 @@ class GitRelease implements Plugin<Project> {
             doLast {
                 def status
                 new ByteArrayOutputStream().withStream { os ->
-                    project.exec {
+                    project.rootProject.exec {
                         workingDir project.rootDir
                         commandLine 'git'
                         args 'status', '--porcelain'
