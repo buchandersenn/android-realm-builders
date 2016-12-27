@@ -40,24 +40,25 @@ class GitRelease implements Plugin<Project> {
                 versionFile.write(newVersion)
 
                 // Commit new version
-//                exec {
-//                    workingDir rootDir
-//                    commandLine 'git'
-//                    args 'add', 'version.txt'
-//                }
-//                exec {
-//                    workingDir rootDir
-//                    commandLine 'git'
-//                    args 'commit', '-m', "prepare next version ${newVersion}"
-//                }
-//
-//                // Push all, including tag
-//                exec {
-//                    workingDir rootDir
-//                    commandLine 'git'
-//                    args 'push', '--follow-tags'
-//                }
+                project.rootProject.exec {
+                    workingDir rootDir
+                    commandLine 'git'
+                    args 'add', 'version.txt'
+                }
+                project.rootProject.exec {
+                    workingDir rootDir
+                    commandLine 'git'
+                    args 'commit', '-m', "prepare next version ${newVersion}"
+                }
+
+                // Push all, including tag
+                project.rootProject.exec {
+                    workingDir rootDir
+                    commandLine 'git'
+                    args 'push', '--follow-tags'
+                }
             }
+            onlyIf { !(project.hasProperty('snapshot') && snapshot.toBoolean())}
         }
 
         project.task('tagGitRelease', dependsOn: 'performReleaseTasks') {
@@ -67,12 +68,13 @@ class GitRelease implements Plugin<Project> {
                 def currentVersion = versionFile.text.trim()
 
                 // Tag release
-//                exec {
-//                    workingDir rootDir
-//                    commandLine 'git'
-//                    args 'tag', '-a', 'v' + currentVersion, '-m', 'version ' + currentVersion
-//                }
+                project.rootProject.exec {
+                    workingDir rootDir
+                    commandLine 'git'
+                    args 'tag', '-a', 'v' + currentVersion, '-m', 'version ' + currentVersion
+                }
             }
+            onlyIf { !(project.hasProperty('snapshot') && snapshot.toBoolean())}
         }
 
         project.task('performReleaseTasks', dependsOn: 'prepareGitRelease') {
@@ -87,16 +89,16 @@ class GitRelease implements Plugin<Project> {
                 versionFile.write(newVersion)
 
                 // Commit new version
-//                exec {
-//                    workingDir rootDir
-//                    commandLine 'git'
-//                    args 'add', 'version.txt'
-//                }
-//                exec {
-//                    workingDir rootDir
-//                    commandLine 'git'
-//                    args 'commit', '-m', "prepare release ${newVersion}"
-//                }
+                project.rootProject.exec {
+                    workingDir rootDir
+                    commandLine 'git'
+                    args 'add', 'version.txt'
+                }
+                project.rootProject.exec {
+                    workingDir rootDir
+                    commandLine 'git'
+                    args 'commit', '-m', "prepare release ${newVersion}"
+                }
             }
             onlyIf { !(project.hasProperty('snapshot') && project.snapshot.toBoolean())}
         }

@@ -23,8 +23,8 @@ ext.commonArtifactProperties = [
 ]
 
 gitRelease {
-    releaseTasks = [tasks.getByPath('realmbuilders-compiler:clean'),
-                    tasks.getByPath('realmbuilders:clean')]
+    releaseTasks = [tasks.getByPath('realmbuilders-compiler:bintrayUpload'),
+                    tasks.getByPath('realmbuilders:bintrayUpload')]
 }
 
 allprojects {

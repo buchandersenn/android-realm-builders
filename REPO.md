@@ -11,7 +11,7 @@ Current version is defined in *version.txt*
 **Release a new remote SNAPSHOT**
 
 ```shell-script
-> ./gradlew publishRelease -Psnapshot=true
+> ./gradlew clean gitRelease -Psnapshot=true
 ```
 
 **Release a new version to Bintray**
@@ -19,7 +19,7 @@ Current version is defined in *version.txt*
 1) Run the publishRelease task
 
 ```shell-script
-> ./gradlew publishRelease
+> ./gradlew clean gitRelease
 ```
 
 2) Goto https://bintray.com/buchandersenn/maven/android-realm-builders and release the new artifacts
