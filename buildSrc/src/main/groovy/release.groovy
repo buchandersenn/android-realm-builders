@@ -19,7 +19,7 @@ class GitRelease implements Plugin<Project> {
         project.task('prepareNextGitSnapshot', dependsOn: 'tagGitRelease') {
             doLast {
                 // Get current version
-                def versionFile = new File("${project.rootDir}/version.txt")
+                def versionFile = new File("${project.rootProject.rootDir}/version.txt")
                 def currentVersion = versionFile.text.trim()
 
                 // Calculate next version
@@ -41,19 +41,19 @@ class GitRelease implements Plugin<Project> {
 
                 // Commit new version
                 project.rootProject.exec {
-                    workingDir rootDir
+                    workingDir project.rootProject.rootDir
                     commandLine 'git'
                     args 'add', 'version.txt'
                 }
                 project.rootProject.exec {
-                    workingDir rootDir
+                    workingDir project.rootProject.rootProject.rootDir
                     commandLine 'git'
                     args 'commit', '-m', "prepare next version ${newVersion}"
                 }
 
                 // Push all, including tag
                 project.rootProject.exec {
-                    workingDir rootDir
+                    workingDir project.rootProject.rootDir
                     commandLine 'git'
                     args 'push', '--follow-tags'
                 }
@@ -64,12 +64,12 @@ class GitRelease implements Plugin<Project> {
         project.task('tagGitRelease', dependsOn: 'performReleaseTasks') {
             doLast {
                 // Get version
-                def versionFile = new File("${project.rootDir}/version.txt")
+                def versionFile = new File("${project.rootProject.rootDir}/version.txt")
                 def currentVersion = versionFile.text.trim()
 
                 // Tag release
                 project.rootProject.exec {
-                    workingDir rootDir
+                    workingDir project.rootProject.rootDir
                     commandLine 'git'
                     args 'tag', '-a', 'v' + currentVersion, '-m', 'version ' + currentVersion
                 }
@@ -83,19 +83,19 @@ class GitRelease implements Plugin<Project> {
         project.task('prepareGitRelease', dependsOn: 'checkGitRepo') {
             doLast {
                 // Set release version by removing -SNAPSHOT
-                def versionFile = new File("${project.rootDir}/version.txt")
+                def versionFile = new File("${project.rootProject.rootDir}/version.txt")
                 def currentVersion = versionFile.text.trim()
                 def newVersion = currentVersion.replace('-SNAPSHOT', '')
                 versionFile.write(newVersion)
 
                 // Commit new version
                 project.rootProject.exec {
-                    workingDir rootDir
+                    workingDir project.rootProject.rootDir
                     commandLine 'git'
                     args 'add', 'version.txt'
                 }
                 project.rootProject.exec {
-                    workingDir rootDir
+                    workingDir project.rootProject.rootDir
                     commandLine 'git'
                     args 'commit', '-m', "prepare release ${newVersion}"
                 }
@@ -109,7 +109,7 @@ class GitRelease implements Plugin<Project> {
                 def status
                 new ByteArrayOutputStream().withStream { os ->
                     project.rootProject.exec {
-                        workingDir project.rootDir
+                        workingDir project.rootProject.rootDir
                         commandLine 'git'
                         args 'status', '--porcelain'
                         standardOutput = os
