@@ -102,7 +102,7 @@ class GitRelease implements Plugin<Project> {
                     args 'commit', '-m', "prepare release ${newVersion}"
                 }
 
-                allprojects {
+                project.rootProject.allprojects {
                     version = newVersion;
                 }
             }
