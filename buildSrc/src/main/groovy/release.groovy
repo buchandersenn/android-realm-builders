@@ -19,6 +19,7 @@ class GitRelease implements Plugin<Project> {
         project.task('prepareNextGitSnapshot', dependsOn: 'tagGitRelease') {
             doLast {
                 // Get current version
+                // TODO : Use project.version
                 def versionFile = new File("${project.rootProject.rootDir}/version.txt")
                 def currentVersion = versionFile.text.trim()
 
@@ -64,6 +65,7 @@ class GitRelease implements Plugin<Project> {
         project.task('tagGitRelease', dependsOn: 'performReleaseTasks') {
             doLast {
                 // Get version
+                // TODO : Use project.version
                 def versionFile = new File("${project.rootProject.rootDir}/version.txt")
                 def currentVersion = versionFile.text.trim()
 
@@ -99,6 +101,7 @@ class GitRelease implements Plugin<Project> {
                     commandLine 'git'
                     args 'commit', '-m', "prepare release ${newVersion}"
                 }
+                project.version = newVersion;
             }
             onlyIf { !(project.hasProperty('snapshot') && project.snapshot.toBoolean())}
         }
