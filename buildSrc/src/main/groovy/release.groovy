@@ -53,11 +53,11 @@ class GitRelease implements Plugin<Project> {
                 }
 
                 // Push all, including tag
-                project.rootProject.exec {
-                    workingDir project.rootProject.rootDir
-                    commandLine 'git'
-                    args 'push', '--follow-tags'
-                }
+//                project.rootProject.exec {
+//                    workingDir project.rootProject.rootDir
+//                    commandLine 'git'
+//                    args 'push', '--follow-tags'
+//                }
             }
             onlyIf { !(project.hasProperty('snapshot') && snapshot.toBoolean())}
         }
@@ -70,11 +70,11 @@ class GitRelease implements Plugin<Project> {
                 def currentVersion = versionFile.text.trim()
 
                 // Tag release
-                project.rootProject.exec {
-                    workingDir project.rootProject.rootDir
-                    commandLine 'git'
-                    args 'tag', '-a', 'v' + currentVersion, '-m', 'version ' + currentVersion
-                }
+//                project.rootProject.exec {
+//                    workingDir project.rootProject.rootDir
+//                    commandLine 'git'
+//                    args 'tag', '-a', 'v' + currentVersion, '-m', 'version ' + currentVersion
+//                }
             }
             onlyIf { !(project.hasProperty('snapshot') && snapshot.toBoolean())}
         }
@@ -101,7 +101,10 @@ class GitRelease implements Plugin<Project> {
                     commandLine 'git'
                     args 'commit', '-m', "prepare release ${newVersion}"
                 }
-                project.version = newVersion;
+
+                allprojects {
+                    version = newVersion;
+                }
             }
             onlyIf { !(project.hasProperty('snapshot') && project.snapshot.toBoolean())}
         }

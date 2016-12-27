@@ -12,7 +12,7 @@ dependencies {
 
 def publishingArtifactId = 'android-realm-builders'
 def publishingArtifactName = 'android-realm-builders'
-def publishingArtifactVersion = rootProject.version
+def publishingArtifactVersion = version
 def publishingArtifactGroup = commonArtifactProperties.artifactGroup
 def publishingArtifactDescription = commonArtifactProperties.artifactDescription
 def publishingSiteUrl = commonArtifactProperties.siteUrl

@@ -14,8 +14,10 @@ dependencies {
     testCompile 'io.realm:realm-annotations:1.2.0'
 }
 
-def publishingArtifactId = 'android-realm-builders-compiler'
-def publishingArtifactName = 'android-realm-builders-compiler'
+def publishingArtifactId = 'android-realm-builders'
+def publishingArtifactName = 'android-realm-builders'
+def publishingArtifactVersion = version
+def publishingArtifactGroup = commonArtifactProperties.artifactGroup
 def publishingArtifactDescription = commonArtifactProperties.artifactDescription
 def publishingSiteUrl = commonArtifactProperties.siteUrl
 def publishingGitUrl = commonArtifactProperties.gitUrl
@@ -39,9 +41,9 @@ artifacts {
 publishing {
     publications {
         library(MavenPublication) {
-            groupId group
+            groupId publishingArtifactGroup
             artifactId publishingArtifactId
-            version version
+            version publishingArtifactVersion
             from components.java
             artifact sourcesJar
             artifact javadocJar
