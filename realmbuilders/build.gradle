@@ -12,7 +12,8 @@ dependencies {
 
 def publishingArtifactId = 'android-realm-builders'
 def publishingArtifactName = 'android-realm-builders'
-def publishingArtifactVersion = version
+def publishingArtifactVersion = rootProject.version
+def publishingArtifactGroup = commonArtifactProperties.artifactGroup
 def publishingArtifactDescription = commonArtifactProperties.artifactDescription
 def publishingSiteUrl = commonArtifactProperties.siteUrl
 def publishingGitUrl = commonArtifactProperties.gitUrl
@@ -36,7 +37,7 @@ artifacts {
 publishing {
     publications {
         library(MavenPublication) {
-            groupId group
+            groupId publishingArtifactGroup
             artifactId publishingArtifactId
             version publishingArtifactVersion
             from components.java

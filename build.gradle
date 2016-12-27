@@ -17,6 +17,7 @@ buildscript {
 }
 
 ext.commonArtifactProperties = [
+        artifactGroup: 'com.github.buchandersenn',
         artifactDescription: 'Auto generate builders for creating and querying Realm models',
         siteUrl: 'https://github.com/buchandersenn/android-realm-builders',
         gitUrl: 'scm:git@github.com:buchandersenn/android-realm-builders.git',
@@ -28,8 +29,6 @@ gitRelease {
 }
 
 allprojects {
-    group = 'com.github.buchandersenn'
-    version = file("${rootDir}/version.txt").text.trim();
     repositories {
         jcenter()
     }
