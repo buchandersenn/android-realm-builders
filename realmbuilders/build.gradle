@@ -66,11 +66,11 @@ publishing {
 Properties bintrayProperties = new Properties()
 bintrayProperties.load(project.rootProject.file('bintray.properties').newDataInputStream())
 bintray {
-    // user and key come from the bintray.properties file in project root (not included in git)
+    // user and key comes from the bintray.properties file in the project root (not included in git)
     user = bintrayProperties.getProperty('bintray.user')
     key = bintrayProperties.getProperty('bintray.apikey')
     publications = ['library']
-    publish = rootProject.hasProperty('snapshot') ? snapshot.toBoolean() : false
+    publish = true // Auto-publish release
     dryRun = false
     pkg {
         repo = 'maven'

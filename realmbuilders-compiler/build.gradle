@@ -14,14 +14,6 @@ dependencies {
     testCompile 'io.realm:realm-annotations:1.2.0'
 }
 
-//def publishingArtifactId = 'android-realm-builders'
-//def publishingArtifactName = 'android-realm-builders'
-//def publishingArtifactVersion = version
-//def publishingArtifactGroup = commonArtifactProperties.artifactGroup
-//def publishingArtifactDescription = commonArtifactProperties.artifactDescription
-//def publishingSiteUrl = commonArtifactProperties.siteUrl
-//def publishingGitUrl = commonArtifactProperties.gitUrl
-
 // Artifacts
 task javadocJar(type: Jar, dependsOn: 'javadoc') {
     from javadoc.destinationDir
@@ -45,7 +37,6 @@ publishing {
         library(MavenPublication) {
             groupId group
             artifactId artifactID
-//            version publishingArtifactVersion
             from components.java
             artifact sourcesJar
             artifact javadocJar
@@ -78,11 +69,11 @@ publishing {
 Properties bintrayProperties = new Properties()
 bintrayProperties.load(project.rootProject.file('bintray.properties').newDataInputStream())
 bintray {
-    // user and key come from the bintray.properties file in project root (not included in git)
+    // user and key comes from the bintray.properties file in the project root (not included in git)
     user = bintrayProperties.getProperty('bintray.user')
     key = bintrayProperties.getProperty('bintray.apikey')
     publications = ['library']
-    publish = rootProject.hasProperty('snapshot') ? snapshot.toBoolean() : false
+    publish = true // Auto-publish release
     dryRun = false
     pkg {
         repo = 'maven'
