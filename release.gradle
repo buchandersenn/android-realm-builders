@@ -1,7 +1,3 @@
-def MAJOR = 0
-def MINOR = 0
-def PATCH = 0
-
 task prepareRelease {
     outputs.upToDateWhen { false }
     doLast {
@@ -50,8 +46,11 @@ task finishRelease {
         def versionFile = new File("${rootDir}/version.txt")
         def currentVersion = versionFile.text.trim()
 
+        // Tag just released version...
         tagRelease(currentVersion)
-        increaseVersion(versionFile, currentVersion, PATCH)
+
+        // Prepare for next -SNAPSHOT version
+        def newVersion = increaseVersion(versionFile, currentVersion, "patch")
         commitVersionAndPush(newVersion)
 
         println "Release of version ${currentVersion} done!"
@@ -65,8 +64,11 @@ task finishReleaseAndUpgradeMinor {
         def versionFile = new File("${rootDir}/version.txt")
         def currentVersion = versionFile.text.trim()
 
+        // Tag just released version...
         tagRelease(currentVersion)
-        increaseVersion(versionFile, currentVersion, MINOR)
+
+        // Prepare for next -SNAPSHOT version
+        def newVersion = increaseVersion(versionFile, currentVersion, "minor")
         commitVersionAndPush(newVersion)
 
         println "Release of version ${currentVersion} done!"
@@ -80,8 +82,11 @@ task finishReleaseAndUpgradeMajor {
         def versionFile = new File("${rootDir}/version.txt")
         def currentVersion = versionFile.text.trim()
 
+        // Tag just released version...
         tagRelease(currentVersion)
-        increaseVersion(versionFile, currentVersion, MAJOR)
+
+        // Prepare for next -SNAPSHOT version
+        def newVersion = increaseVersion(versionFile, currentVersion, "major")
         commitVersionAndPush(newVersion)
 
         println "Release of version ${currentVersion} done!"
@@ -97,7 +102,7 @@ def tagRelease(currentVersion) {
     }
 }
 
-def increaseVersion(versionFile, currentVersion, type) {
+def increaseVersion(versionFile, currentVersion, upgrade) {
     def newVersion
 
     if (project.hasProperty("nextVersion")) {
@@ -106,27 +111,27 @@ def increaseVersion(versionFile, currentVersion, type) {
         currentVersion = currentVersion.replace('-SNAPSHOT', '')
         def split = currentVersion.split('\\.', 3)
         def version = [
-                split[MAJOR].toInteger(),
-                split[MINOR].toInteger(),
-                split[PATCH].toInteger(),
+                split[0].toInteger(),
+                split[1].toInteger(),
+                split[2].toInteger(),
         ]
 
-        switch (type) {
-            case MAJOR:
-                version[MAJOR] += 1
-                version[MINOR] = 0
-                version[PATCH] = 0
+        switch (upgrade) {
+            case "major":
+                version[0] += 1
+                version[1] = 0
+                version[2] = 0
                 break
-            case MINOR:
-                version[MINOR] += 1
-                version[PATCH] = 0
+            case "minor":
+                version[1] += 1
+                version[2] = 0
                 break
-            case PATCH:
-                version[PATCH] += 1
+            case "patch":
+                version[2] += 1
                 break
         }
 
-        newVersion = version[MAJOR] + '.' + version[MINOR] + '.' + version[PATCH] + '-SNAPSHOT'
+        newVersion = version[0] + '.' + version[1] + '.' + version[2] + '-SNAPSHOT'
     }
 
     versionFile.write(newVersion)
