@@ -1,7 +1,5 @@
-import com.github.buchandersenn.GitRelease
-
-//apply from: 'release.gradle'
-apply plugin: GitRelease
+apply from: 'release.gradle'
+//apply plugin: GitRelease
 
 buildscript {
     repositories {
@@ -16,19 +14,19 @@ buildscript {
     }
 }
 
-ext.commonArtifactProperties = [
-        artifactGroup: 'com.github.buchandersenn',
-        artifactDescription: 'Auto generate builders for creating and querying Realm models',
-        siteUrl: 'https://github.com/buchandersenn/android-realm-builders',
-        gitUrl: 'scm:git@github.com:buchandersenn/android-realm-builders.git',
-]
-
-gitRelease {
-    releaseTasks = [tasks.getByPath('realmbuilders-compiler:bintrayUpload'),
-                    tasks.getByPath('realmbuilders:bintrayUpload')]
-}
+//gitRelease {
+//    releaseTasks = [tasks.getByPath('realmbuilders-compiler:bintrayUpload'),
+//                    tasks.getByPath('realmbuilders:bintrayUpload')]
+//}
 
 allprojects {
+    group = 'com.github.buchandersenn'
+    version = file("${rootDir}/version.txt").text.trim();
+
+    ext.artifactDescription = 'Auto generate builders for creating and querying Realm models'
+    ext.siteUrl = 'https://github.com/buchandersenn/android-realm-builders'
+    ext.gitUrl = 'scm:git@github.com:buchandersenn/android-realm-builders.git'
+
     repositories {
         jcenter()
     }

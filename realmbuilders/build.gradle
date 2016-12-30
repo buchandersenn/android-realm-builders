@@ -10,14 +10,6 @@ dependencies {
     compile fileTree(dir: '../libs', include: ['*.jar'])
 }
 
-def publishingArtifactId = 'android-realm-builders'
-def publishingArtifactName = 'android-realm-builders'
-def publishingArtifactVersion = version
-def publishingArtifactGroup = commonArtifactProperties.artifactGroup
-def publishingArtifactDescription = commonArtifactProperties.artifactDescription
-def publishingSiteUrl = commonArtifactProperties.siteUrl
-def publishingGitUrl = commonArtifactProperties.gitUrl
-
 // Artifacts
 task javadocJar(type: Jar, dependsOn: 'javadoc') {
     from javadoc.destinationDir
@@ -33,31 +25,33 @@ artifacts {
     archives sourcesJar
 }
 
+def artifactID = 'android-realm-builders'
+
 // Maven POM
 publishing {
     publications {
         library(MavenPublication) {
-            groupId publishingArtifactGroup
-            artifactId publishingArtifactId
-            version publishingArtifactVersion
+            groupId group
+            artifactId artifactID
+//            version publishingArtifactVersion
             from components.java
             artifact sourcesJar
             artifact javadocJar
 
             pom.withXml {
                 Node root = asNode()
-                root.appendNode('name', publishingArtifactName)
-                root.appendNode('description', publishingArtifactDescription)
-                root.appendNode('url', publishingSiteUrl)
+                root.appendNode('name', artifactID)
+                root.appendNode('description', artifactDescription)
+                root.appendNode('url', siteUrl)
 
                 def issues = root.appendNode('issueManagement')
                 issues.appendNode('system', 'github')
-                issues.appendNode('url', publishingSiteUrl + '/issues')
+                issues.appendNode('url', siteUrl + '/issues')
 
                 def scm = root.appendNode('scm')
-                scm.appendNode('url', publishingSiteUrl)
-                scm.appendNode('connection', publishingGitUrl)
-                //scm.appendNode('developerConnection', commonArtifactProperties.gitConnection)
+                scm.appendNode('url', siteUrl)
+                scm.appendNode('connection', gitUrl)
+                //scm.appendNode('developerConnection', gitUrl)
 
                 def license = root.appendNode('licenses').appendNode('license')
                 license.appendNode('name', 'The Apache Software License, Version 2.0')
@@ -80,11 +74,11 @@ bintray {
     dryRun = false
     pkg {
         repo = 'maven'
-        name = publishingArtifactName
-        desc = publishingArtifactDescription
-        websiteUrl = publishingSiteUrl
-        issueTrackerUrl = publishingSiteUrl + '/issues'
-        vcsUrl = publishingGitUrl
+        name = artifactID
+        desc = artifactDescription
+        websiteUrl = siteUrl
+        issueTrackerUrl = siteUrl + '/issues'
+        vcsUrl = gitUrl
         licenses = ['Apache-2.0']
         labels = ['android', 'realm']
         publicDownloadNumbers = false
