@@ -72,7 +72,7 @@ task finishReleaseAndUpgradeMinor {
         commitVersionAndPush(newVersion)
 
         println "Release of version ${currentVersion} done!"
-        println "Started development of next patch version: ${newVersion}"
+        println "Started development of next minor version: ${newVersion}"
     }
 }
 
@@ -90,7 +90,7 @@ task finishReleaseAndUpgradeMajor {
         commitVersionAndPush(newVersion)
 
         println "Release of version ${currentVersion} done!"
-        println "Started development of next patch version: ${newVersion}"
+        println "Started development of next major version: ${newVersion}"
     }
 }
 
