@@ -126,7 +126,7 @@ You can see more examples in the example app [here](/example).
 ## Tips and Tricks
 
 To construct objects with default or computed values, consider adding factory methods to
-the Realm model classes. For example:
+the Realm model classes. Some examples:
 
 ```java
 public class Person extends RealmObject {
@@ -135,10 +135,18 @@ public class Person extends RealmObject {
     public boolean hasDogs;
     public RealmList<Dog> dogs;
 
-    public static Person createPerson(String name, Dog dog) {
-        return new PersonBuilder()
+    public static PersonBuilder builder() {
+        new PersonBuilder();
+    }
+
+    public static PersonBuilder buildWith(String name) {
+        return Person.builder()
             .uuid(UUID.randomUUID().toString())
-            .name(name)
+            .name(name);
+    }
+
+    public static Person createPerson(String name, Dog dog) {
+        return Person.buildWith(name)
             .hasDogs(dog != null)
             .addDog(dog)
             .build();
@@ -182,5 +190,5 @@ constants in the `<class>Fields` classes, e.g. `PersonFields.NAME`.
 
 ## About this library
 
-This library was heavily inspired by https://github.com/cmelchior/realmfieldnameshelper
-by Christian Melchior.
+This library started out as a clone of https://github.com/cmelchior/realmfieldnameshelper
+by Christian Melchio, and grew from there. Thanks Christian!
