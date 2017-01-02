@@ -1,5 +1,4 @@
 apply from: 'release.gradle'
-//apply plugin: GitRelease
 
 buildscript {
     repositories {
@@ -13,11 +12,6 @@ buildscript {
         classpath 'io.realm:realm-gradle-plugin:1.2.0'
     }
 }
-
-//gitRelease {
-//    releaseTasks = [tasks.getByPath('realmbuilders-compiler:bintrayUpload'),
-//                    tasks.getByPath('realmbuilders:bintrayUpload')]
-//}
 
 allprojects {
     group = 'com.github.buchandersenn'

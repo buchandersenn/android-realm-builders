@@ -10,11 +10,50 @@ THE LIBRARY IS STILL A WORK IN PROGRESS. NOT YET RELEASED.
 
 ## Installation
 
-Just include the following dependency in your `gradle.build` file:
+If you are using version 2.2+ of the Android Gradle plugin, simply include the following
+dependencies in the `build.gradle` file:
 
 ```gradle
-compile 'com.github.buchandersenn:android-realm-builders:1.0.0'
-apt 'com.github.buchandersenn:android-realm-builders-compiler:1.0.0'
+    compile 'com.github.buchandersenn:android-realm-builders:1.0.0'
+    annotationProcessor 'com.github.buchandersenn:android-realm-builders-compiler:1.0.0'
+```
+
+If you are using an older version of the android plugin, you need to use apt instead.
+Add the android-apt dependency in the `gradle.build` file of the root project,
+along with Realm itself:
+
+
+```gradle
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath "io.realm:realm-gradle-plugin:2.2.0"
+    }
+}
+...
+```
+
+Then apply the android-apt plugin and include the library in the `gradle.build`
+file of your app as follows:
+
+```gradle
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt' // NOTE: apt must be applied before Realm!
+apply plugin: 'realm-android'
+
+dependencies {
+    compile 'com.github.buchandersenn:android-realm-builders:1.0.0'
+    apt 'com.github.buchandersenn:android-realm-builders-compiler:1.0.0'
+    ...
+}
+
+android {
+    ...
+}
 ```
 
 This library is compatible with  `Realm 1.1.1` and onwards.
