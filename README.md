@@ -1,3 +1,5 @@
+[ ![Download](https://api.bintray.com/packages/buchandersenn/maven/android-realm-builders-compiler/images/download.svg) ](https://bintray.com/buchandersenn/maven/android-realm-builders-compiler/_latestVersion)
+
 # Realm Builders
 
 This library auto-generates builder classes for creating and querying Realm data.
