@@ -6,8 +6,6 @@ For each Realm model class two corresponding classes are created:
 * `<class>Builder`
 * `<class>QueryBuilder`
 
-THE LIBRARY IS STILL A WORK IN PROGRESS. NOT YET RELEASED.
-
 ## Installation
 
 If you are using version 2.2+ of the Android Gradle plugin, simply include the following
