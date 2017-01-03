@@ -8,6 +8,12 @@ Current version is defined in *version.txt*
 > ./gradlew clean build publishToMavenLocal
 ```
 
+**Release a new remote SNAPSHOT**
+
+```shell-script
+> ./gradlew clean artifactoryPublish
+```
+
 **Release a new version to Bintray**
 
 ```shell-script

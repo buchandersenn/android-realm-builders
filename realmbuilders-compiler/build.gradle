@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
 apply plugin: 'com.jfrog.bintray'
 
 sourceCompatibility = '1.7'
@@ -65,11 +66,31 @@ publishing {
     }
 }
 
-// Bintray release
+// Bintray username/password comes from the bintray.properties file in the project root,
+// and is not included in git
 Properties bintrayProperties = new Properties()
 bintrayProperties.load(project.rootProject.file('bintray.properties').newDataInputStream())
+
+// SNAPSHOT configuration
+artifactory {
+    contextUrl = 'https://oss.jfrog.org'
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local'
+            username = bintrayProperties.getProperty('bintray.user')
+            password = bintrayProperties.getProperty('bintray.apikey')
+            maven = true
+        }
+        defaults {
+            publications('library')
+            publishPom = true
+            publishIvy = false
+        }
+    }
+}
+
+// Bintray release configuration
 bintray {
-    // user and key comes from the bintray.properties file in the project root (not included in git)
     user = bintrayProperties.getProperty('bintray.user')
     key = bintrayProperties.getProperty('bintray.apikey')
     publications = ['library']
